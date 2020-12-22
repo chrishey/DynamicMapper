@@ -16,21 +16,21 @@ namespace Dynamic.Mapper
             foreach (var configEntry in config.MappingDictionary)
             {
                 var valuesArray = configEntry.Value.Split(',');
-                var payloadValue = string.Empty;
+                var payloadValues = new List<object>();
 
                 foreach (var value in valuesArray)
                 {
                     // get the values off the payload
-                    payloadValue += payload[value];
+                    payloadValues.Add(payload[value]);
                 }
 
-                interimModel[configEntry.Key] = payloadValue;
+                interimModel[configEntry.Key] = string.Join(" ", payloadValues);
             }
 
             foreach (var interimModelKey in interimModel.Keys)
             {
                 // find the property on the EndModel that the key refers to
-                var modelProperty = model.GetType().GetProperty(interimModelKey, BindingFlags.IgnoreCase);
+                var modelProperty = model.GetType().GetProperty(interimModelKey, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                 if(modelProperty == null) continue;
                 modelProperty.SetValue(model, interimModel[interimModelKey]);
             }
