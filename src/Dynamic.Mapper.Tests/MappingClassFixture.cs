@@ -26,6 +26,17 @@ namespace Dynamic.Mapper.Tests
             result.ShouldNotBeNull();
         }
 
+        [Fact]
+        public void Map_With_ValidConfig_Should_MapFields()
+        {
+            SetupValidPayload();
+            SetupValidConfig();
+
+            var result = _itemUnderTest.Map(_payload, _config);
+
+            result.Name.ShouldEqual("Bob Bobbins");
+        }
+
         private void SetupValidPayload()
         {
             _payload = new Dictionary<string, object>
